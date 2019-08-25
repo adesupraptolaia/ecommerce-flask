@@ -22,7 +22,7 @@ def create_token_non_internal():
 
         ## do request
         req = call_client(request)
-        res = req.get('/token', data=json.dumps(data), content_type='application/json') # seperti nembak API luar (contoh weather.io)
+        res = req.post('/token', data=json.dumps(data), content_type='application/json') # seperti nembak API luar (contoh weather.io)
 
         ## store response
         res_json = json.loads(res.data)
@@ -53,7 +53,7 @@ def create_token_internal():
 
         ## do request
         req = call_client(request)
-        res = req.get('/token/admin', data=json.dumps(data), content_type='application/json') # seperti nembak API luar (contoh weather.io)
+        res = req.post('/token/admin', data=json.dumps(data), content_type='application/json') # seperti nembak API luar (contoh weather.io)
 
         ## store response
         res_json = json.loads(res.data)

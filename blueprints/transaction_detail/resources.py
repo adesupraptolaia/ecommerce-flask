@@ -65,5 +65,66 @@ class TransactionDetailList(Resource):
         return rows, 200, {'Content-Type': 'application/json'}
 
 
+# Admin Only
+
+class TransactionDetailAdminResource(Resource):
+
+    def __init__(self):
+        pass
+    
+    def options(self, id=None):
+        return {"status": "oke"}
+
+    @jwt_required
+    @internal_required
+    def get(self, id):  # get by id
+        qry = Transaction_detail.query.get(id)
+        if qry is not None:
+            return marshal(qry, Transaction_detail.response_fields), 200, {'Content-Type': 'application/json'}
+        return {'status': 'transaction_detail Not Found'}, 404, {'Content-Type': 'application/json'}
+
+
+class TransactionDetailAdminList(Resource):
+
+    def __init__(self):
+        pass
+
+    def options(self):
+        return {"status": "oke"}
+        
+    @jwt_required
+    @internal_required
+    def get(self):
+        parser = reqparse.RequestParser()
+        parser.add_argument('p', type=int, location='args', default=1)
+        parser.add_argument('rp', type=int, location='args', default=25)
+        parser.add_argument('product_id', type=int, location='args')
+        parser.add_argument('transaction_id', type=int, location='args')
+        parser.add_argument('client_id', type=int, location='args')
+        data = parser.parse_args()
+
+        offset = (data['p'] * data['rp']) - data['rp']
+
+        
+        qry = Transaction_detail.query
+        
+        if data['product_id'] is not None:
+            qry = qry.filter_by(product_id=data['product_id'])
+
+        if data['transaction_id'] is not None:
+            qry = qry.filter_by(transaction_id=data['transaction_id'])
+        
+        if data['transaction_id'] is not None:
+            qry = qry.filter_by(transaction_id=data['transaction_id'])
+
+        rows = []
+        for row in qry.limit(data['rp']).offset(offset).all():
+            rows.append(marshal(row, Transaction_detail.response_fields))
+        return rows, 200, {'Content-Type': 'application/json'}
+
+
+
 api.add_resource(TransactionDetailList, '')
 api.add_resource(TransactionDetailResource, '', '/<id>')
+api.add_resource(TransactionDetailAdminList, '/admin')
+api.add_resource(TransactionDetailAdminResource, '/admin/<id>')

@@ -98,6 +98,7 @@ from blueprints.client_detail.resources import bp_client_detail
 from blueprints.product.resources import bp_product
 from blueprints.transaction.resources import bp_transaction
 from blueprints.transaction_detail.resources import bp_transaction_detail
+from blueprints.wishlish.resources import bp_wishlist
 
 app.register_blueprint(bp_auth, url_prefix='/token')
 app.register_blueprint(bp_admin, url_prefix='/admin')
@@ -106,6 +107,7 @@ app.register_blueprint(bp_client, url_prefix='/client')
 app.register_blueprint(bp_client_detail, url_prefix='/client/detail')
 app.register_blueprint(bp_product, url_prefix='/product')
 app.register_blueprint(bp_transaction, url_prefix='/transaction')
+app.register_blueprint(bp_wishlist, url_prefix='/wishlist')
 app.register_blueprint(bp_transaction_detail, url_prefix='/transactiondetail')
 
 db.create_all()

@@ -44,12 +44,16 @@ class TransactionResource(Resource):
 
         cart_qry = Cart.query.filter_by(client_id = int(client_id)).all()
 
+        # check if there is product's stock not enough
         for item in cart_qry:
             product_qry = Products.query.get(item.product_id)
-            # if Stock not enough
             if int(item.qty) > int(product_qry.stock):
                 return {"status" : "Habis"}
 
+        # continue if all stock enoungh
+        for item in cart_qry:
+            product_qry = Products.query.get(item.product_id)
+            
             trans_detail = Transaction_detail(transaction_id, client_id, item.product_id, item.product_name, item.qty, item.price)
 
             # to update transaction price
@@ -69,9 +73,6 @@ class TransactionResource(Resource):
         app.logger.debug('DEBUG : %s', transaction)
 
         return marshal(transaction, Transactions.response_fields), 200, {'Content-Type': 'application/json'}
-
-    # @jwt_required
-    # @internal_required
 
     
 
@@ -104,5 +105,36 @@ class TransactionList(Resource):
         return rows, 200, {'Content-Type': 'application/json'}
 
 
+class TransactionAdminList(Resource):
+
+    def __init__(self):
+        pass
+
+    def options(self):
+        return {"status": "oke"}
+        
+    @jwt_required
+    @internal_required
+    def get(self):
+        parser = reqparse.RequestParser()
+        parser.add_argument('p', type=int, location='args', default=1)
+        parser.add_argument('rp', type=int, location='args', default=25)
+        parser.add_argument('client_id', type=int, location='args')
+        data = parser.parse_args()
+
+        offset = (data['p'] * data['rp']) - data['rp']
+
+
+        qry = Transactions.query
+
+        if data['client_id'] is not None:
+            qry = qry.filter_by(client_id=data['client_id'])
+
+        rows = []
+        for row in qry.limit(data['rp']).offset(offset).all():
+            rows.append(marshal(row, Transactions.response_fields))
+        return rows, 200, {'Content-Type': 'application/json'}
+
 api.add_resource(TransactionList, '')
+api.add_resource(TransactionAdminList, '/admin')
 api.add_resource(TransactionResource, '', '/<id>')

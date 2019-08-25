@@ -4,13 +4,12 @@ import json
 from .model import Cart
 from ..product.model import Products
 from ..client.model import Clients
-from .model import Cart
 from ..transaction_detail.model import Transaction_detail
 from flask_jwt_extended import jwt_required, get_jwt_claims
 from blueprints import db, app, internal_required, non_internal_required
 
 bp_cart = Blueprint('cart', __name__)
-api_cart = Api(bp_cart)
+api = Api(bp_cart)
 
 #######################
 # Using flask-restful
@@ -100,7 +99,7 @@ class CartResource(Resource):
     
 
 
-api_cart.add_resource(CartResource, '', '/<id>')
+api.add_resource(CartResource, '', '/<id>')
 
 
         

@@ -44,9 +44,9 @@ class TestClientCrud():
     def test_client_put_valid(self, client):
         token = create_token_non_internal()
         data = {
-            "username": "tes1",
-            "password": "tes1",
-            "email" : "tes1@tes1.com"
+            "username": "tes2",
+            "password": "tes2",
+            "email" : "tes2@tes2.com"
         }
         res=client.put('/client', headers={'Authorization': 'Bearer ' + token},
                         data=json.dumps(data),
