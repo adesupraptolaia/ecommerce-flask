@@ -61,9 +61,17 @@ class ClientResource(Resource):
        
         # CLIENT ADALAH PEMBELI, JADI STATUS = 0 / FALSE
         data = parser.parse_args()
-
+        
         claims = get_jwt_claims()
         qry = Clients.query.get(claims['id'])
+        
+        # if username before not == username after
+        current_username = qry.username
+        if current_username != data['username']:
+            # if username has been used
+            client_qry = Clients.query.filter_by(username=data['username']).first()
+            if client_qry is not None:
+                return {'status': 'please input another username'}
 
         qry.username = data['username']
         qry.password = data['password']
@@ -75,18 +83,25 @@ class ClientResource(Resource):
 
         return marshal(qry, Clients.response_fields_client_detail), 200, {'Content-Type': 'application/json'}
 
-    # @jwt_required
-    # @non_internal_required
-    # def delete(self):
-    #     claims = get_jwt_claims()
 
-    #     qry = Clients.query.get(claims['id'])
-    #     if qry is None:
-    #         return {'status': 'Client Not Found'}, 404, {'Content-Type': 'application/json'}
+class ClientAllResource(Resource):
 
-    #     db.session.delete(qry)
-    #     db.session.commit()
+    def __init__(self):
+        pass
 
-    #     return {'status': 'Client Deleted'}, 200, {'Content-Type': 'application/json'}
+    def options(self):
+        return {"status": "oke"}
+
+    # hanya bisa melihat akunnya sendiri
+    @jwt_required
+    @non_internal_required
+    def get(self): 
+        claims = get_jwt_claims()
+        qry = Clients.query.get(claims['id'])
+        if qry is not None:
+            return marshal(qry, Clients.response_fields_client_detail), 200, {'Content-Type': 'application/json'}
+        return {'status': 'Client Not Found'}, 404, {'Content-Type': 'application/json'}
+    
    
 api.add_resource(ClientResource, '')
+api.add_resource(ClientAllResource, '/all')
