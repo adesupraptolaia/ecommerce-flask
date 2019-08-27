@@ -61,7 +61,7 @@ def non_internal_required(fn):
 # Setting Database
 app.config['APP_DEBUG'] = True
 # localhost aka 127.0.0.1
-app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+pymysql://adesupraptolaia:alta123@127.0.0.1:3306/ecommerce'
+app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+pymysql://admin:Altabatch3@ecommerce.ctfwww9400s4.ap-southeast-1.rds.amazonaws.com:3306/ecommerce'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
 db = SQLAlchemy(app)
