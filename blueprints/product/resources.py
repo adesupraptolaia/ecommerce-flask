@@ -135,7 +135,7 @@ class ProductList(Resource):
         if data['category'] is not None:
             qry = qry.filter_by(category=data['category'])
 
-        qry = qry.order_by((Products.id).desc())
+        qry = qry.order_by((Products.id))
 
         rows = []
         for row in qry.limit(data['rp']).offset(offset).all():
