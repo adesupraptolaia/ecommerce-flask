@@ -29,7 +29,7 @@ class TestWishlistCrud():
     def test_client_post_valid(self, client):
         token = create_token_non_internal()
         data = {
-            "product_id": "5",
+            "product_id": "4",
         }
         res=client.post('/wishlist',
                         data=json.dumps(data),

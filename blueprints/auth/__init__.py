@@ -42,7 +42,7 @@ class CreateTokenResources(Resource):
 
 class CreateTokenAdminResources(Resource):
     def options(self):
-        return {"status": "oke"}
+        return {"status": "oke"}, 200
 
     def post(self):
         # Create token
@@ -65,6 +65,7 @@ class CreateTokenAdminResources(Resource):
         else:
             return {'status': 'UNATHORIZED', 'message': 'invalid username or password or email'}, 401
         return {'token': token}, 200
+
 
 api.add_resource(CreateTokenResources, '')
 api.add_resource(CreateTokenAdminResources, '/admin')
