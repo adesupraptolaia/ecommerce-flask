@@ -1,3 +1,12 @@
+from blueprints.wishlish.resources import bp_wishlist
+from blueprints.transaction_detail.resources import bp_transaction_detail
+from blueprints.transaction.resources import bp_transaction
+from blueprints.product.resources import bp_product
+from blueprints.client_detail.resources import bp_client_detail
+from blueprints.client.resources import bp_client
+from blueprints.cart.resources import bp_cart
+from blueprints.admin.resources import bp_admin
+from blueprints.auth import bp_auth
 from flask import Flask, request
 import json
 # Import yang dibutuhkan untuk database
@@ -90,15 +99,6 @@ def after_request(response):
 
 # import blueprints
 # Tidak perlu nama file, karena nama filenya __init__.py
-from blueprints.auth import bp_auth
-from blueprints.admin.resources import bp_admin
-from blueprints.cart.resources import bp_cart
-from blueprints.client.resources import bp_client
-from blueprints.client_detail.resources import bp_client_detail
-from blueprints.product.resources import bp_product
-from blueprints.transaction.resources import bp_transaction
-from blueprints.transaction_detail.resources import bp_transaction_detail
-from blueprints.wishlish.resources import bp_wishlist
 
 app.register_blueprint(bp_auth, url_prefix='/token')
 app.register_blueprint(bp_admin, url_prefix='/admin')
