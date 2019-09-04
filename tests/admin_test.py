@@ -1,7 +1,9 @@
 import json
-from . import app, client, cache, create_token_non_internal, create_token_internal
+from . import app, client, cache, create_token_non_internal, create_token_internal, reset_database
 
 class TestAdminCrud():
+
+    reset_database()
 
     id = 0
 
@@ -75,4 +77,21 @@ class TestAdminCrud():
         # TestBookCrud.id = res_json['id']
         assert res.status_code == 400
 
-# 
+    def test_admin_options_valid(self, client):
+        res = client.options('/admin')
+        res_json=json.loads(res.data)     
+        assert res.status_code == 200
+
+# ######### options token auth
+    def test_token_client_options_valid(self, client):
+        res = client.options('/token')
+
+        res_json=json.loads(res.data)     
+        assert res.status_code == 200
+        
+    def test_token_admin_options_valid(self, client):
+        res = client.options('/token/admin')
+        
+        res_json=json.loads(res.data)     
+        assert res.status_code == 200
+

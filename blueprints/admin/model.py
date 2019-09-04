@@ -25,5 +25,5 @@ class Admins(db.Model):
         self.email =email
         self.status = True
 
-    def __repr__(self):
-        return '<Admin %r>' % self.id
+    # def __repr__(self):
+    #     return '<Admin %r>' % self.id

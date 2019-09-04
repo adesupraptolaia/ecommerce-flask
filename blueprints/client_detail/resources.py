@@ -12,7 +12,7 @@ api = Api(bp_client_detail)
 class ClientDetailsResource(Resource):
 
     def options(self):
-        return {"status": "oke"}
+        return {"status": "oke"}, 200
 
     def __init__(self):
         pass

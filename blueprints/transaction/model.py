@@ -23,5 +23,5 @@ class Transactions(db.Model):
         self.client_id = client_id
         self.total_price = total_price
 
-    def __repr__(self):
-        return '<Transaction %r>' % self.id
+    # def __repr__(self):
+    #     return '<Transaction %r>' % self.id

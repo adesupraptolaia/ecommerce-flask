@@ -11,14 +11,12 @@ from blueprints import db, app, internal_required, non_internal_required
 bp_cart = Blueprint('cart', __name__)
 api = Api(bp_cart)
 
-#######################
-# Using flask-restful
-#######################
+
 
 class CartResource(Resource):
 
     def options(self, id=None):
-        return {"status": "oke"}
+        return {"status": "oke"}, 200
 
     # method to add items to cart
     
@@ -68,7 +66,7 @@ class CartResource(Resource):
         
         # if demand > stock
         if  int(data['qty']) > int(product_qry.stock):
-            return {"status": "Stock not enough"}
+            return {"status": "Stock not enough"}, 400
 
         # if product has been in cart
         cart_qry = Cart.query.filter_by(product_id=int(data['product_id']))

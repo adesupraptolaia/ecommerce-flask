@@ -1,5 +1,5 @@
 from flask import Flask, request
-import json
+import json, os
 # Import yang dibutuhkan untuk database
 from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate, MigrateCommand
@@ -8,6 +8,7 @@ from flask_jwt_extended import JWTManager, verify_jwt_in_request, get_jwt_claims
 from datetime import timedelta
 from functools import wraps
 from flask_cors import CORS
+import config
 
 app = Flask(__name__)
 CORS(app)
@@ -20,17 +21,6 @@ app.config['JWT_SECRET_KEY'] = 'zENpazwq97E5BqkFUcAdc9ssMqnRMuufe7aQDHYc'
 app.config['JWT_ACCESS_TOKEN_EXPIRES'] = timedelta(days=1)
 
 jwt = JWTManager(app)
-
-# jwt custom decorator
-# @jwt.user_claims_loader # Terima kasih atas perjuangan anda
-# def add_claims_to_access_token(identity):
-#     return {
-#         'claims': identity,
-#         'identifier': 'ATA-Batch3'
-#     }
-
-# Buat Decorator untuk internal only
-
 
 def internal_required(fn):
     @wraps(fn)
@@ -45,7 +35,6 @@ def internal_required(fn):
 
 # Buat Decorator untuk non-internal
 
-
 def non_internal_required(fn):
     @wraps(fn)
     def wrapper(*args, **kwargs):
@@ -58,10 +47,23 @@ def non_internal_required(fn):
     return wrapper
 
 
+try:
+    env = os.environ.get('FLASK_ENV', 'development')
+    if env == 'testing':
+        app.config.from_object(config.TestingConfig)
+    else:
+        app.config.from_object(config.DevelopmentConfig)
+
+except Exception as e:
+    raise e
+
+
+
 # Setting Database
 app.config['APP_DEBUG'] = True
 # localhost aka 127.0.0.1
-app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+pymysql://admin:Altabatch3@ecommerce.ctfwww9400s4.ap-southeast-1.rds.amazonaws.com:3306/ecommerce'
+
+# app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+pymysql://admin:Altabatch3@ecommerce.ctfwww9400s4.ap-southeast-1.rds.amazonaws.com:3306/ecommerce'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
 db = SQLAlchemy(app)
@@ -98,6 +100,7 @@ from blueprints.client.resources import bp_client
 from blueprints.cart.resources import bp_cart
 from blueprints.admin.resources import bp_admin
 from blueprints.auth import bp_auth
+from blueprints.weather import bp_weather
 # Tidak perlu nama file, karena nama filenya __init__.py
 
 app.register_blueprint(bp_auth, url_prefix='/token')
@@ -109,5 +112,6 @@ app.register_blueprint(bp_product, url_prefix='/product')
 app.register_blueprint(bp_transaction, url_prefix='/transaction')
 app.register_blueprint(bp_wishlist, url_prefix='/wishlist')
 app.register_blueprint(bp_transaction_detail, url_prefix='/transactiondetail')
+app.register_blueprint(bp_weather, url_prefix='/weather')
 
 db.create_all()

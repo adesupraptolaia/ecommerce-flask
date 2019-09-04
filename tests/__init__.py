@@ -1,7 +1,11 @@
 import pytest, json, logging
 from flask import Flask, request, json
-from blueprints import app
+from blueprints import app, db
 from app import cache
+from blueprints.admin.model import Admins
+from blueprints.client.model import Clients
+from blueprints.client_detail.model import ClientDetails
+from blueprints.product.model import Products
 
 def call_client(request):
     client = app.test_client()
@@ -10,6 +14,25 @@ def call_client(request):
 @pytest.fixture
 def client(request):
     return call_client(request)
+
+
+def reset_database():
+
+    db.drop_all()
+    db.create_all()
+
+    admin = Admins("tes", "tes", "tes@tes.com")
+    client = Clients("tes", "tes", "tes@tes.com")
+    # client_detail = ClientDetails(1, "fullname", "081208520813", "address")
+    product = Products("name", "description", "category", "image", 10000, 10, 9000, 20)
+    
+
+    # save users to database
+    db.session.add(admin)
+    db.session.add(client)
+    # db.session.add(client_detail)
+    db.session.add(product)
+    db.session.commit()
 
 def create_token_non_internal():
     token = cache.get('token-non-internal')
@@ -70,5 +93,5 @@ def create_token_internal():
         return res_json['token']
     else:
         return token
+    
         
-            

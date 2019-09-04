@@ -17,7 +17,7 @@ class TransactionDetailResource(Resource):
         pass
     
     def options(self, id=None):
-        return {"status": "oke"}
+        return {"status": "oke"}, 200
 
     @jwt_required
     @non_internal_required
@@ -34,7 +34,7 @@ class TransactionDetailList(Resource):
         pass
 
     def options(self):
-        return {"status": "oke"}
+        return {"status": "oke"}, 200
         
     @jwt_required
     @non_internal_required
@@ -73,7 +73,7 @@ class TransactionDetailAdminResource(Resource):
         pass
     
     def options(self, id=None):
-        return {"status": "oke"}
+        return {"status": "oke"}, 200
 
     @jwt_required
     @internal_required
@@ -90,7 +90,7 @@ class TransactionDetailAdminList(Resource):
         pass
 
     def options(self):
-        return {"status": "oke"}
+        return {"status": "oke"}, 200
         
     @jwt_required
     @internal_required
@@ -111,9 +111,6 @@ class TransactionDetailAdminList(Resource):
         if data['product_id'] is not None:
             qry = qry.filter_by(product_id=data['product_id'])
 
-        if data['transaction_id'] is not None:
-            qry = qry.filter_by(transaction_id=data['transaction_id'])
-        
         if data['transaction_id'] is not None:
             qry = qry.filter_by(transaction_id=data['transaction_id'])
 

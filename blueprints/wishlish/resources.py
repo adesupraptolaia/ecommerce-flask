@@ -17,7 +17,7 @@ api = Api(bp_wishlist)
 class WishlistResource(Resource):
 
     def options(self, id=None):
-        return {"status": "oke"}
+        return {"status": "oke"}, 200
     
     @jwt_required
     @non_internal_required

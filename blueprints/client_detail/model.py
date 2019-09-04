@@ -25,5 +25,5 @@ class ClientDetails(db.Model):
         self.phone = phone
         self.address = address
 
-    def __repr__(self):
-        return '<ClientDetails %r>' % self.client_id
+    # def __repr__(self):
+    #     return '<ClientDetails %r>' % self.client_id

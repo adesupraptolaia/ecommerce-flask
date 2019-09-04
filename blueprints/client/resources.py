@@ -37,7 +37,7 @@ class ClientResource(Resource):
 
         client_qry = Clients.query.filter_by(username=data['username']).first()
         if client_qry is not None:
-            return {'status': 'please input another username'}
+            return {'status': 'please input another username'}, 400
 
         client = Clients(data['username'], data['password'], data['email'])
         db.session.add(client)
@@ -68,7 +68,7 @@ class ClientResource(Resource):
             client_qry = Clients.query.filter_by(
                 username=data['username']).first()
             if client_qry is not None:
-                return {'status': 'please input another username'}
+                return {'status': 'please input another username'}, 400
 
         qry.username = data['username']
         qry.password = data['password']
@@ -84,24 +84,4 @@ class ClientResource(Resource):
         return {"status": "oke"}, 200
 
 
-class ClientAllResource(Resource):
-
-    def __init__(self):
-        pass
-
-    # hanya bisa melihat akunnya sendiri
-    @jwt_required
-    @non_internal_required
-    def get(self):
-        claims = get_jwt_claims()
-        qry = Clients.query.get(claims['id'])
-        if qry is not None:
-            return marshal(qry, Clients.response_fields_client_detail), 200, {'Content-Type': 'application/json'}
-        return {'status': 'Client Not Found'}, 404, {'Content-Type': 'application/json'}
-
-    def options(self):
-        return {"status": "oke"}, 200
-
-
 api.add_resource(ClientResource, '')
-api.add_resource(ClientAllResource, '/all')

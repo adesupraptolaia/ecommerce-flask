@@ -38,9 +38,6 @@ class AdminResource(Resource):
 
         qry = Admins.query.get(claims['id'])
 
-        if qry is None:
-            return {'status': 'USER_NOT_FOUND'}, 404
-
         qry.username = data['username']
         qry.password = data['password']
         qry.email = data['email']

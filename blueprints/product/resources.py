@@ -12,7 +12,7 @@ api = Api(bp_product)
 
 class ProductResource(Resource):
     
-    def options(self, id):
+    def options(self, id=None):
         return {"status": "oke"}, 200
 
 
@@ -114,7 +114,7 @@ class ProductResource(Resource):
 class ProductList(Resource):
 
     def options(self):
-        return {"status": "oke"}
+        return {"status": "oke"}, 200
 
     def __init__(self):
         pass

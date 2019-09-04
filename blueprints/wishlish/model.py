@@ -27,5 +27,5 @@ class Wishlist(db.Model):
         self.product_image = product_image
         self.price = price
 
-    def __repr__(self):
-        return '<Cart %r>' % self.id
+    # def __repr__(self):
+    #     return '<Cart %r>' % self.id

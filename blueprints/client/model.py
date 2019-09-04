@@ -34,5 +34,17 @@ class Clients(db.Model):
         self.email = email
         self.status = False
 
-    def __repr__(self):
-        return '<Client %r>' % self.id
+    # def __repr__(self):
+    #     return '<Client %r>' % self.id
+
+    @classmethod
+    def is_exists(cls, data):
+
+        all_data = cls.query.all()
+
+        existing_username = [item.username for item in all_data]
+
+        if data in existing_username:
+            return True
+
+        return False
